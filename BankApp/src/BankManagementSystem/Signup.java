@@ -1,12 +1,11 @@
 package BankManagementSystem;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.util.Random;
+import java.awt.*;
+import java.util.*;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import com.toedter.calendar.JDateChooser;
+
 
 
 
