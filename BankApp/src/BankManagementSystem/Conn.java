@@ -12,7 +12,7 @@ public class Conn {
 		try {
 			Class.forName(com.mysql.cj.jdbc.Driver);
 			c = DriverManager.getConnection("jdbc:mysql:///BankApp","root","root");
-			s = c.createStatement()
+			s = c.createStatement();
 		} catch(Exception e) {
 			
 			System.out.println(e);
