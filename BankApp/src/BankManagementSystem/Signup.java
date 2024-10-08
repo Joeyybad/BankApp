@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-
+import com.toedter.calendar.*;
 
 
 
@@ -58,14 +58,31 @@ public class Signup extends JFrame {
 		DOB.setBounds(100,240,150,30);
 		add(DOB);
 		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(300,240,400,30);
+		dateChooser.setForeground(new Color(105, 105, 105));
+		add(dateChooser);
+		
 	
-		
-		
 		JLabel gender = new JLabel("Gender:");  
 		
 		gender.setFont(new Font("Raleway",Font.BOLD, 20));
 		gender.setBounds(100,290,150,30);
 		add(gender);
+		
+		JRadioButton male = new JRadioButton("Male");
+		male.setBounds(300,290,150,30);
+		male.setBackground(Color.WHITE);
+		add(male);
+		
+		JRadioButton female = new JRadioButton("Female");
+		female.setBounds(450,290,150,30);
+		female.setBackground(Color.WHITE);
+		add(female);
+		
+		ButtonGroup gendergroup = new ButtonGroup();
+		gendergroup.add(male);
+		gendergroup.add(female);
 		
 		JLabel email = new JLabel("Email:");  
 		email.setFont(new Font("Raleway",Font.BOLD, 20));
@@ -78,9 +95,30 @@ public class Signup extends JFrame {
 		add(emailText);
 		
 		JLabel marital = new JLabel("Marital Status:");  
-		marital.setFont(new Font("Raleway",Font.BOLD, 20));
+		marital.setFont(new Font("Raleway",Font.BOLD,20));
 		marital.setBounds(100,390,150,30);
 		add(marital);
+		
+		JRadioButton maried = new JRadioButton("Married");
+		maried.setBounds(300,390,100,30);
+		maried.setBackground(Color.WHITE);
+		add(maried);
+		
+		
+		JRadioButton unmarried = new JRadioButton("Unmarried");
+		unmarried.setBounds(450,390,150,30);
+		unmarried.setBackground(Color.WHITE);
+		add(unmarried);
+		
+		JRadioButton other = new JRadioButton("other");
+		other.setBounds(630,390,150,30);
+		other.setBackground(Color.WHITE);
+		add(other);
+		
+		ButtonGroup maritalgroup = new ButtonGroup();
+		maritalgroup.add(maried);
+		maritalgroup.add(unmarried);
+		maritalgroup.add(other);
 
 		JLabel address = new JLabel("Address:");  
 		address.setFont(new Font("Raleway",Font.BOLD, 20));
@@ -123,8 +161,18 @@ public class Signup extends JFrame {
 		pinText.setBounds(300,590,400,30);
 		add(pinText);
 		
-		
-		
+		JButton next = new JButton("Next");
+		next.setBackground(Color.BLACK);
+		next.setForeground(Color.WHITE);
+		next.setFont(new Font("Raleway", Font.BOLD,14));
+		next.setBounds(620,660,80,30);
+		add(next);
+        // Forcer le bouton à être opaque pour appliquer le fond noir
+		next.setOpaque(true);
+
+        // Retirer la bordure par défaut pour que le fond soit plus visible
+		next.setBorderPainted(false);
+		 
 		 
 		
 		/**
