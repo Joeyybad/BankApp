@@ -301,6 +301,8 @@ public class Signup extends JFrame implements ActionListener {
 	        
 	        stmt.executeUpdate();
 	        JOptionPane.showMessageDialog(null, "Enregistrement réussi!");
+	        setVisible(false);
+	        new SignupTwo(formno).setVisible(true);
 	    } catch (SQLIntegrityConstraintViolationException e) {
 	        // Gérer l'exception pour les doublons
 	        JOptionPane.showMessageDialog(null, "Cet enregistrement existe déjà (doublon détecté).", "Erreur", JOptionPane.ERROR_MESSAGE);
