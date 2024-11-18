@@ -10,5 +10,8 @@
 	<classpathentry kind="lib" path="/Users/jordan/git/repository/BankApp/mysql-connector-j-9.0.0.jar"/>
 	<classpathentry kind="lib" path="/Users/jordan/git/repository/BankApp/mysql-connector-java-8.0.21.jar"/>
 	<classpathentry kind="lib" path="/Users/jordan/Downloads/jbcrypt-0.4.jar"/>
+	<classpathentry kind="lib" path="/Users/jordan/Downloads/junit-jupiter-api-5.11.3-javadoc.jar"/>
+	<classpathentry kind="lib" path="/Users/jordan/Downloads/mockito-core-5.14.2-javadoc.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

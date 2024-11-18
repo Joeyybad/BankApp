@@ -233,6 +233,9 @@ public class SignupThree extends JFrame implements ActionListener {
 		            stmt2.setString(2, cardnumber);
 		            stmt2.setString(3, pinnumber);
 		            stmt2.executeUpdate();
+		            
+		            setVisible(false);
+		            new Deposit(pinnumber).setVisible(false);
 
 		        } catch (SQLIntegrityConstraintViolationException e) {
 		            JOptionPane.showMessageDialog(null, "Cet enregistrement existe déjà (doublon détecté).", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -240,7 +243,8 @@ public class SignupThree extends JFrame implements ActionListener {
 		            JOptionPane.showMessageDialog(null, "Erreur SQL: " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 		        }
 		    } else if (ae.getSource() == cancel) {
-		        // Action de cancel
+		        setVisible(false);
+		        new Login().setVisible(true);
 		    }
 		}
 

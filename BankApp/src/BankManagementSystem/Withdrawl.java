@@ -6,13 +6,13 @@ import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Deposit extends JFrame implements ActionListener {
+public class Withdrawl extends JFrame implements ActionListener {
 
     JTextField amountField;
-    JButton deposit, back;
+    JButton withdraw, back;
     String pinnumber;
 
-    Deposit(String pinnumber) {
+    Withdrawl(String pinnumber) {
         this.pinnumber = pinnumber;
         setLayout(null);
 
@@ -25,7 +25,7 @@ public class Deposit extends JFrame implements ActionListener {
         add(image);
 
         // Add label for instructions
-        JLabel text = new JLabel("Enter the amount you want to deposit");
+        JLabel text = new JLabel("Enter the amount you want to withdraw");
         text.setForeground(Color.WHITE);
         text.setFont(new Font("System", Font.BOLD, 16));
         text.setBounds(170, 300, 400, 20);
@@ -38,10 +38,10 @@ public class Deposit extends JFrame implements ActionListener {
         image.add(amountField);
 
         // Add Deposit button
-        deposit = new JButton("Deposit");
-        deposit.setBounds(355, 485, 150, 30);
-        deposit.addActionListener(this);
-        image.add(deposit);
+        withdraw = new JButton("Withdraw");
+        withdraw.setBounds(355, 485, 150, 30);
+        withdraw.addActionListener(this);
+        image.add(withdraw);
 
         // Add Back button
         back = new JButton("Back");
@@ -56,7 +56,7 @@ public class Deposit extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == deposit) {
+        if (ae.getSource() == withdraw) {
             handleDeposit();
         } else if (ae.getSource() == back) {
             setVisible(false);
@@ -71,23 +71,21 @@ public class Deposit extends JFrame implements ActionListener {
         String formattedDate = sdf.format(date);
 
         if (amount.equals("")) {
-            JOptionPane.showMessageDialog(null, "Please enter the amount you want to deposit");
+            JOptionPane.showMessageDialog(null, "Please enter the amount you want to withdraw");
         } else {
             try {
-                // Créer une connexion et initialiser les gestionnaires
                 Conn conn = new Conn();
                 DatabaseHandler dbHandler = new DatabaseHandler(conn.c);
-                DepositHandler depositHandler = new DepositHandler(dbHandler);
+                WithdrawHandler withdrawHandler = new WithdrawHandler(dbHandler);
+                boolean success = withdrawHandler.withdraw(pinnumber, formattedDate, amount);
 
-                // Appel de la méthode insertDeposit
-                boolean success = depositHandler.insertDeposit(pinnumber, formattedDate, amount);
 
                 if (success) {
-                    JOptionPane.showMessageDialog(null, "Amount Deposited Successfully");
+                    JOptionPane.showMessageDialog(null, "Amount Withdraw Successfully");
                     setVisible(false);
                     new Transactions(pinnumber).setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Deposit failed", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Withdrawl failed", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -100,3 +98,4 @@ public class Deposit extends JFrame implements ActionListener {
         new Deposit("");
     }
 }
+
