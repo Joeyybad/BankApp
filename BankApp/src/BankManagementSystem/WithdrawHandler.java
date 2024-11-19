@@ -1,5 +1,7 @@
 package BankManagementSystem;
 
+import java.sql.ResultSet;
+
 public class WithdrawHandler {
     private final DatabaseHandler dbHandler;
 
@@ -11,29 +13,28 @@ public class WithdrawHandler {
     }
 
     public boolean withdraw(String pin, String date, String amount) {
-        if (amount == null || amount.isEmpty()) {
-            throw new IllegalArgumentException("Le montant ne peut pas être vide.");
-        }
-
         try {
-            // Vérifier si le solde est suffisant
-            String balanceQuery = "SELECT SUM(CASE WHEN type = 'Deposit' THEN amount ELSE -amount END) AS balance FROM bank WHERE pin = ?";
-            var resultSet = dbHandler.executeQuery(balanceQuery, pin);
-            if (resultSet.next()) {
-                double balance = resultSet.getDouble("balance");
-                double withdrawAmount = Double.parseDouble(amount);
+            // Récupérer le solde actuel
+            String queryBalance = "SELECT balance FROM bank WHERE pin = ? ORDER BY date DESC LIMIT 1";
+            ResultSet rs = dbHandler.executeQuery(queryBalance, pin);
 
-                if (withdrawAmount > balance) {
-                    throw new RuntimeException("Fonds insuffisants pour effectuer le retrait.");
-                }
-            } else {
-                throw new RuntimeException("Aucun compte associé au PIN fourni.");
+            int currentBalance = 0;
+            if (rs.next()) {
+                currentBalance = rs.getInt("balance");
             }
 
-            // Insérer le retrait
-            String query = "INSERT INTO bank (pin, date, type, amount) VALUES (?, ?, 'Withdrawal', ?)";
-            return dbHandler.executeUpdate(query, pin, date, -Double.parseDouble(amount));
+            // Vérifier si le solde est suffisant
+            int withdrawAmount = Integer.parseInt(amount);
+            if (currentBalance < withdrawAmount) {
+                throw new RuntimeException("Solde insuffisant pour effectuer ce retrait.");
+            }
 
+            // Calculer le nouveau solde
+            int newBalance = currentBalance - withdrawAmount;
+
+            // Insérer la transaction avec le nouveau solde
+            String queryInsert = "INSERT INTO bank (pin, date, type, amount, balance) VALUES (?, ?, ?, ?, ?)";
+            return dbHandler.executeUpdate(queryInsert, pin, date, "Withdrawl", amount, newBalance);
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors du retrait : " + e.getMessage(), e);
         }

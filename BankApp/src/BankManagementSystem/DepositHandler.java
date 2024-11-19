@@ -1,5 +1,7 @@
 package BankManagementSystem;
 
+import java.sql.ResultSet;
+
 public class DepositHandler {
     private final DatabaseHandler dbHandler;
 
@@ -13,10 +15,26 @@ public class DepositHandler {
 
     // Méthode pour insérer un dépôt
     public boolean insertDeposit(String pin, String date, String amount) {
-        if (amount == null || amount.isEmpty()) {
-            throw new IllegalArgumentException("Le montant ne peut pas être vide.");
+        try {
+            // Récupérer le solde actuel
+            String queryBalance = "SELECT balance FROM bank WHERE pin = ? ORDER BY date DESC LIMIT 1";
+            ResultSet rs = dbHandler.executeQuery(queryBalance, pin);
+
+            int currentBalance = 0;
+            if (rs.next()) {
+                currentBalance = rs.getInt("balance");
+            }
+
+            // Calculer le nouveau solde
+            int depositAmount = Integer.parseInt(amount);
+            int newBalance = currentBalance + depositAmount;
+
+            // Insérer la transaction avec le nouveau solde
+            String queryInsert = "INSERT INTO bank (pin, date, type, amount, balance) VALUES (?, ?, ?, ?, ?)";
+            return dbHandler.executeUpdate(queryInsert, pin, date,"Deposit", amount, newBalance);
+        } catch (Exception e) {
+            throw new RuntimeException("Erreur lors de l'insertion du dépôt : " + e.getMessage(), e);
         }
-        String query = "INSERT INTO bank (pin, date, type, amount) VALUES(?, ?, ?, ?)";
-        return dbHandler.executeUpdate(query, pin, date, "Deposit", amount);
     }
+
 }
