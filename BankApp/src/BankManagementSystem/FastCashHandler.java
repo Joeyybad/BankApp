@@ -22,30 +22,36 @@ public class FastCashHandler {
      */
     public boolean withdrawFastCash(String pin, String date, String amount) {
         try {
-            // Récupérer le solde actuel
+            // Vérifier le solde disponible
             String balanceQuery = "SELECT balance FROM bank WHERE pin = ? ORDER BY date DESC LIMIT 1";
             ResultSet rs = dbHandler.executeQuery(balanceQuery, pin);
             double currentBalance = 0;
 
             if (rs.next()) {
                 currentBalance = rs.getDouble("balance");
+                System.out.println(currentBalance);
             }
 
             double withdrawAmount = Double.parseDouble(amount);
 
-            // Vérifier si le solde est suffisant
             if (withdrawAmount > currentBalance) {
                 throw new RuntimeException("Solde insuffisant pour effectuer le retrait rapide.");
             }
 
             // Calculer le nouveau solde
             double newBalance = currentBalance - withdrawAmount;
-
+            System.out.println(newBalance);
+            System.out.println("Montant demandé : " + amount);
+            System.out.println("Balance actuelle : " + currentBalance);
+            System.out.println("Nouvelle balance calculée : " + newBalance);
             // Insérer la transaction avec le nouveau solde
             String insertQuery = "INSERT INTO bank (pin, date, type, amount, balance) VALUES (?, ?, 'Withdrawal', ?, ?)";
-            return dbHandler.executeUpdate(insertQuery, pin, date, -withdrawAmount, newBalance);
+            return dbHandler.executeUpdate(insertQuery, pin, date, -withdrawAmount, newBalance); // Stocker le montant négatif
+            
+
         } catch (Exception e) {
             throw new RuntimeException("Erreur lors du retrait rapide : " + e.getMessage(), e);
         }
     }
+
 }

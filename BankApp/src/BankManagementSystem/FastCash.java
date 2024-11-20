@@ -79,7 +79,7 @@ public class FastCash extends JFrame implements ActionListener {
 	        new Transactions(pinnumber).setVisible(true);
 	    } else {
 	        // Récupérer le montant à partir du bouton
-	        String amountText = ((JButton) ae.getSource()).getText(); 
+	        String amountText = ((JButton) ae.getSource()).getText();
 	        int amount;
 
 	        try {
@@ -94,33 +94,13 @@ public class FastCash extends JFrame implements ActionListener {
 	            // Initialiser la connexion
 	            Conn c = new Conn();
 	            DatabaseHandler dbHandler = new DatabaseHandler(c.c);
+	            FastCashHandler fastCashHandler = new FastCashHandler(dbHandler);
 
-	            // Calculer le solde actuel
-	            String query = "SELECT * FROM bank WHERE pin = ?";
-	            ResultSet rs = dbHandler.executeQuery(query, pinnumber);
+	            // Effectuer le retrait rapide
+	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	            String date = sdf.format(new Date());
 
-	            int balance = 0;
-	            while (rs.next()) {
-	                String type = rs.getString("type");
-	                int transactionAmount = Integer.parseInt(rs.getString("amount"));
-
-	                if (type.equals("Deposit")) {
-	                    balance += transactionAmount;
-	                } else if (type.equals("Withdrawl")) {
-	                    balance -= transactionAmount;
-	                }
-	            }
-
-	            // Vérifier si le solde est suffisant
-	            if (balance < amount) {
-	                JOptionPane.showMessageDialog(null, "Solde insuffisant pour ce retrait.");
-	                return;
-	            }
-
-	            // Effectuer le retrait
-	            Date date = new Date();
-	            String withdrawQuery = "INSERT INTO bank (pin, date, type, amount) VALUES (?, ?, ?, ?)";
-	            boolean success = dbHandler.executeUpdate(withdrawQuery, pinnumber, date, "Withdrawl", amount);
+	            boolean success = fastCashHandler.withdrawFastCash(pinnumber, date, String.valueOf(amount));
 
 	            if (success) {
 	                JOptionPane.showMessageDialog(null, "Retrait réussi de " + amount + "€.");
@@ -135,6 +115,7 @@ public class FastCash extends JFrame implements ActionListener {
 	        }
 	    }
 	}
+
 
 	public static void main(String[] args) {
 		new FastCash("");
