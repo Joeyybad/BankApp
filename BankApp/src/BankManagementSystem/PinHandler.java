@@ -19,31 +19,38 @@ public class PinHandler {
         try {
             System.out.println("Vérification de l'ancien PIN : " + oldPin);
 
-            // Vérification de l'ancien PIN dans la table 'bank'
-            String checkPinQuery = "SELECT pin FROM bank WHERE pin = '" + oldPin + "'"; 
+            // Étape 1 : Vérifier si l'ancien PIN existe dans la table `bank`
+            String checkPinQuery = "SELECT pin FROM bank WHERE pin = '" + oldPin + "'";
             ResultSet rs = dbHandler.executeQuery(checkPinQuery);
 
             if (!rs.next()) {
-                System.out.println("Ancien PIN introuvable.");
-                throw new RuntimeException("L'ancien PIN est incorrect.");
+                System.out.println("Ancien PIN introuvable dans bank.");
+                return false;
             }
 
             System.out.println("Ancien PIN trouvé. Mise à jour avec le nouveau PIN : " + newPin);
 
-            // Mise à jour du PIN dans la table 'bank'
-            String updatePinQuery = "UPDATE bank SET pin = '" + newPin + "' WHERE pin = '" + oldPin + "'";
-            boolean bankUpdated = dbHandler.executeUpdate(updatePinQuery);
+            // Étape 2 : Ajuster le PIN pour `signupthree` si nécessaire
+            String getSignupThreePinQuery = "SELECT pinnumber FROM signupthree WHERE pinnumber = '" + oldPin + "'";
+            ResultSet rsSignupThree = dbHandler.executeQuery(getSignupThreePinQuery);
 
-            // Mise à jour du PIN dans la table 'login'
-            String updatePinQuery2 = "UPDATE login SET pin = '" + newPin + "' WHERE pin = '" + oldPin + "'";
-            boolean loginUpdated = dbHandler.executeUpdate(updatePinQuery2);
+            if (rsSignupThree.next()) {
+                oldPin = rsSignupThree.getString("pinnumber");
+                System.out.println("Ancien PIN ajusté pour signupthree : " + oldPin);
+            }
 
-            // Mise à jour du PIN dans la table 'signupthree'
-            String updatePinQuery3 = "UPDATE signupthree SET pin = '" + newPin + "' WHERE pin = '" + oldPin + "'";
-            boolean signupUpdated = dbHandler.executeUpdate(updatePinQuery3);
+            // Étape 3 : Mettre à jour le PIN dans toutes les tables
+            String updateBankQuery = "UPDATE bank SET pin = '" + newPin + "' WHERE pin = '" + oldPin + "'";
+            boolean bankUpdated = dbHandler.executeUpdate(updateBankQuery);
 
-            // Si toutes les mises à jour sont réussies
-            if (bankUpdated && loginUpdated && signupUpdated) {
+            String updateSignupThreeQuery = "UPDATE signupthree SET pinnumber = '" + newPin + "' WHERE pinnumber = '" + oldPin + "'";
+            boolean signupThreeUpdated = dbHandler.executeUpdate(updateSignupThreeQuery);
+
+            String updateLoginQuery = "UPDATE login SET pinnumber = '" + newPin + "' WHERE pinnumber = '" + oldPin + "'";
+            boolean loginUpdated = dbHandler.executeUpdate(updateLoginQuery);
+
+            // Vérifier le succès des mises à jour
+            if (bankUpdated && signupThreeUpdated && loginUpdated) {
                 System.out.println("PIN mis à jour avec succès dans toutes les tables.");
                 return true;
             } else {
@@ -56,4 +63,5 @@ public class PinHandler {
             return false;
         }
     }
+
 }
