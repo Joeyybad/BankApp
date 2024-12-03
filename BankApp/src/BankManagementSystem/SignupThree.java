@@ -1,6 +1,7 @@
 package BankManagementSystem;
 
 import java.awt.*;
+import org.mindrot.jbcrypt.BCrypt;
 import java.awt.event.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -196,6 +197,8 @@ public class SignupThree extends JFrame implements ActionListener {
 		        Random random = new Random();
 		        String cardnumber = String.format("%016d", Math.abs(random.nextLong() % 10000000000000000L));
 		        String pinnumber = String.format("%04d", Math.abs(random.nextInt(9000) + 1000));
+		        
+		        String hashedPin = PasswordUtil.hashPin(pinnumber);
 
 		        // Vérifier si un service est sélectionné
 		        StringBuilder facilityBuilder = new StringBuilder();
@@ -220,7 +223,7 @@ public class SignupThree extends JFrame implements ActionListener {
 		            stmt.setString(1, formno);
 		            stmt.setString(2, accountType);
 		            stmt.setString(3, cardnumber);
-		            stmt.setString(4, pinnumber);
+		            stmt.setString(4, hashedPin);
 		            stmt.setString(5, facility);
 		            stmt.executeUpdate();
 		            
@@ -231,7 +234,7 @@ public class SignupThree extends JFrame implements ActionListener {
 		            PreparedStatement stmt2 = c.c.prepareStatement(query2);
 		            stmt2.setString(1, formno);
 		            stmt2.setString(2, cardnumber);
-		            stmt2.setString(3, pinnumber);
+		            stmt2.setString(3, hashedPin);
 		            stmt2.executeUpdate();
 		            
 		            setVisible(false);
@@ -245,6 +248,17 @@ public class SignupThree extends JFrame implements ActionListener {
 		    } else if (ae.getSource() == cancel) {
 		        setVisible(false);
 		        new Login().setVisible(true);
+		    }
+		}
+		public class PasswordUtil {
+		    // Méthode pour hasher un PIN
+		    public static String hashPin(String pin) {
+		        return BCrypt.hashpw(pin, BCrypt.gensalt());
+		    }
+
+		    // Méthode pour vérifier un PIN contre son hash
+		    public static boolean checkPin(String pin, String hashedPin) {
+		        return BCrypt.checkpw(pin, hashedPin);
 		    }
 		}
 

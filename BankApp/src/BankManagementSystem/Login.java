@@ -7,6 +7,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import BankManagementSystem.SignupThree.PasswordUtil;
+
 
 public class Login extends JFrame implements ActionListener{
 	
@@ -122,19 +124,24 @@ public class Login extends JFrame implements ActionListener{
 			Conn conn = new Conn();
 			String cardnumber = cardTextField.getText();
 			String pinnumber = pinTextField.getText();
-			String query = "select * from login where cardnumber ='"+cardnumber+"' and pinnumber ='"+pinnumber+"'";
+			String query = "SELECT pinnumber FROM login WHERE cardnumber = '" + cardnumber + "'";
+
 			
 			try {
-				ResultSet rs = conn.s.executeQuery(query);
-				if(rs.next()) {
-					setVisible(false);
-					new Transactions(pinnumber).setVisible(true);
-					
-				} else {
-					JOptionPane.showMessageDialog(null,"Incorrect card number or pin number");
-				}
-			}catch(Exception e) {
-				System.out.print(e);
+			    ResultSet rs = conn.s.executeQuery(query);
+			    if (rs.next()) {
+			        String storedHashedPin = rs.getString("pinnumber");
+			        if (PasswordUtil.checkPin(pinnumber, storedHashedPin)) {
+			            setVisible(false);
+			            new Transactions(pinnumber).setVisible(true);
+			        } else {
+			            JOptionPane.showMessageDialog(null, "Incorrect card number or pin number");
+			        }
+			    } else {
+			        JOptionPane.showMessageDialog(null, "Incorrect card number or pin number");
+			    }
+			} catch (Exception e) {
+			    System.out.print(e);
 			}
 			
 		} else if (ae.getSource()== signupButton) {
