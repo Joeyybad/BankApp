@@ -6,7 +6,8 @@ import java.awt.event.*;
 
 public class Balance extends JFrame implements ActionListener {
 
-    JButton back;
+    private static final long serialVersionUID = 1L;
+	JButton back;
     String pinnumber;
 
     Balance(String pinnumber) {

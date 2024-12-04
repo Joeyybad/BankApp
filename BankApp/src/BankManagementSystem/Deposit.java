@@ -8,7 +8,8 @@ import java.util.Date;
 
 public class Deposit extends JFrame implements ActionListener {
 
-    JTextField amountField;
+    private static final long serialVersionUID = 1L;
+	JTextField amountField;
     JButton deposit, back;
     String pinnumber;
 

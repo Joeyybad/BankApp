@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class FastCash extends JFrame implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
 	JButton deposit, withdrawl, fastcash, ministatement,pinchange, balance, exit;
 	String pinnumber;
 	FastCash(String pinnumber){

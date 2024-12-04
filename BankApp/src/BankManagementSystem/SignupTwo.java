@@ -14,6 +14,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class SignupTwo extends JFrame implements ActionListener {
 
 	
+	private static final long serialVersionUID = 1L;
 	long random;
 	JTextField panText, idNoText;
 	JButton next;

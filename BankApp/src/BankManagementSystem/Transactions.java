@@ -7,6 +7,7 @@ import java.awt.event.*;
 
 public class Transactions extends JFrame implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
 	JButton deposit, withdrawl, fastcash, ministatement,pinchange, balance, exit;
 	String pinnumber;
 	Transactions(String pinnumber){

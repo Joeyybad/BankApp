@@ -12,6 +12,7 @@ import BankManagementSystem.SignupThree.PasswordUtil;
 
 public class Login extends JFrame implements ActionListener{
 	
+	private static final long serialVersionUID = 1L;
 	JButton loginButton,clearButton,signupButton;
 	JTextField cardTextField;
 	JPasswordField pinTextField;
@@ -123,6 +124,7 @@ public class Login extends JFrame implements ActionListener{
 		} else if(ae.getSource()== loginButton) {
 			Conn conn = new Conn();
 			String cardnumber = cardTextField.getText();
+			@SuppressWarnings("deprecation")
 			String pinnumber = pinTextField.getText();
 			String query = "SELECT pinnumber FROM login WHERE cardnumber = '" + cardnumber + "'";
 

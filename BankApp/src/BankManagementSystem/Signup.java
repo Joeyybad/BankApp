@@ -20,6 +20,8 @@ import java.util.regex.*;
 
 public class Signup extends JFrame implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
+
 	long random;
 	
 	JTextField fnameText, lnameText,dobText, emailText, addressText, cityText, stateText,pinText;

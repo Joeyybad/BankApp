@@ -12,6 +12,7 @@ import javax.swing.*;
 
 public class SignupThree extends JFrame implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
 	JRadioButton r1, r2, r3, r4;
 	JCheckBox c1,c2,c3,c4,c5,c6,c7;
 	JButton submit, cancel;

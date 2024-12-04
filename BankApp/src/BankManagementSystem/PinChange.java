@@ -6,7 +6,8 @@ import javax.swing.*;
 
 public class PinChange extends JFrame implements ActionListener {
 
-    JTextField pin, repin;
+    private static final long serialVersionUID = 1L;
+	JTextField pin, repin;
     JButton change, back;
     String pinnumber;
 
